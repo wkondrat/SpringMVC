@@ -27,32 +27,26 @@ public class BookController {
 	
 	@Autowired
 	BookService bookService;
-//	@RequestMapping
-//	public String list(Model model) {
-//		// TODO: implement default method
-//		return ViewNames.BOOKS;
-//	}
 
 	/**
 	 * Method collects info about all books
 	 */
-	@RequestMapping//("/all")
+	@RequestMapping
 	public ModelAndView allBooks(Model model) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("bookList",bookService.findAllBooks());
 		modelAndView.setViewName(ViewNames.BOOKS2);
-		// TODO: implement method gathering and displaying all books
 		return modelAndView;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView findBook(@ModelAttribute("searchBook") BookTo searchBook) {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("bookList",
-				bookService.findBooksByTitleAndAuthor(searchBook.getTitle(), searchBook.getAuthors()));
-		modelAndView.setViewName(ViewNames.FOUNDED);
-		return modelAndView;	
-	}
+//	@RequestMapping(method = RequestMethod.POST)
+//	public ModelAndView findBook(@ModelAttribute("searchBook") BookTo searchBook) {
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.addObject("bookList",
+//				bookService.findBooksByTitleAndAuthor(searchBook.getTitle(), searchBook.getAuthors()));
+//		modelAndView.setViewName(ViewNames.FOUNDED);
+//		return modelAndView;	
+//	}
 	
 	@RequestMapping("/book")
 	public ModelAndView detail(@RequestParam("id") Long id) {
@@ -94,13 +88,6 @@ public class BookController {
 //		return ViewNames.FOUNDED;
 //	}
 	
-	
-	
-	// TODO: here implement methods which displays book info based on query
-	// arguments
-
-	// TODO: Implement GET / POST methods for "add book" functionality
-
 	/**
 	 * Binder initialization
 	 */

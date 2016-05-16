@@ -34,8 +34,6 @@ public class LoginController {
 	public ModelAndView accesssDenied(Principal user) {
 		ModelAndView model = new ModelAndView();
 		model.addObject("errorMessage", user.getName() + " Access denied");
-		// TODO: implement mechanism redirecting to new custom page _403
-		// (consider extending informations by custom values)
 		return model;
 
 	}

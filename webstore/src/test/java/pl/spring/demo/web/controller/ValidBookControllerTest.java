@@ -63,7 +63,7 @@ public class ValidBookControllerTest {
 		// attribute
 		ResultActions resultActions = mockMvc.perform(post("/books/add").flashAttr("newBook", testBook));
 		// then
-		resultActions.andExpect(view().name("addBook"))
+		resultActions.andExpect(view().name("books2"))
 				.andExpect(model().attribute("newBook", new ArgumentMatcher<Object>() {
 					@Override
 					public boolean matches(Object argument) {

@@ -82,11 +82,4 @@ public class BookRestService {
 		List<BookTo> book = bookService.findBooksByTitleAndAuthor(title, authors);
 		return new ResponseEntity<List<BookTo>>(book, HttpStatus.OK);
 	}
-	// TODO: Inject properly book service
-
-	// TODO: implement all necessary CRUD operations as a rest service
-
-	// TODO: implement some search methods considering single request parameters
-	// / multiple request parameters / array request parameters
-
 }
