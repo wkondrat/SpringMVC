@@ -1,10 +1,15 @@
 package pl.spring.demo.web.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
@@ -17,11 +22,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import pl.spring.demo.constants.ModelConstants;
+import pl.spring.demo.constants.ViewNames;
 import pl.spring.demo.controller.BookController;
 import pl.spring.demo.enumerations.BookStatus;
 import pl.spring.demo.service.BookService;
@@ -73,6 +79,45 @@ public class ValidBookControllerTest {
 				}));
 
 	}
+	
+	@Test
+    public void testShouldFindAllBooks() throws Exception {
+          // given
+          BookTo testBook = new BookTo(1L, "Test title", "Test Author", BookStatus.FREE);
+           Mockito.when(bookService.findAllBooks()).thenReturn(Arrays.asList(testBook));
+          // when
+          ResultActions resultActions = mockMvc.perform(get("/books"));
+          // then
+          resultActions.andExpect(view().name(ViewNames.BOOKS2))
+                        .andExpect(model().attribute(ModelConstants.BOOK_LIST, new ArgumentMatcher<Object>() {
+                              @Override
+                              public boolean matches(Object argument) {
+                                     List<BookTo> books = (List<BookTo>) argument;
+                                     return books.isEmpty() != true && testBook.getTitle().equals(books.get(0).getTitle());
+                              }
+                        }));
+
+    }
+	
+	@Test
+	public void testFindBookById() throws Exception {
+		// given
+		BookTo testBook = new BookTo(1L, "Test title", "Test Author", BookStatus.FREE);
+		// when
+		Mockito.when(bookService.findBooksById(Mockito.any(Long.class))).thenReturn(testBook);
+		ResultActions resultActions = mockMvc.perform(get("/books/book?id=1"));
+		// then
+		resultActions.andExpect(view().name(ViewNames.BOOK))
+		.andExpect(model().attribute("book" ,new ArgumentMatcher<Object>() {
+			@Override
+			public boolean matches(Object argument) {
+				BookTo book = (BookTo) argument;
+				return null != book && testBook.getId().equals(book.getId());
+			}
+		}));
+
+	}
+	
 
 	/**
 	 * Sample method which convert's any object from Java to String

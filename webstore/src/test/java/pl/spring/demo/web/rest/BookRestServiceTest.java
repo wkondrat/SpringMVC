@@ -109,4 +109,23 @@ public class BookRestServiceTest {
 				.andExpect(jsonPath("[0].authors").value(bookTo1.getAuthors()));
 	}
 
+	
+
+	@Test
+	public void testShouldDeleteBookById() throws Exception {
+
+		// given:
+		final BookTo bookTo1 = new BookTo(1L, "title", "Author1", BookStatus.FREE);
+
+		Mockito.when(bookService.findBooksById(1L)).thenReturn(bookTo1);
+		// Mockito.when(bookService.deleteBook(1L));
+		// when
+		ResultActions response = this.mockMvc.perform(get("/rest/books/{id}", 1L).accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON).content("1"));
+
+		response.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(bookTo1.getId().intValue()))
+				.andExpect(jsonPath("$.title").value(bookTo1.getTitle()))
+				.andExpect(jsonPath("$.authors").value(bookTo1.getAuthors()));
+	}
+
 }
